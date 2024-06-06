@@ -33,7 +33,7 @@ jobs:
       uses: docker/login-action@v3
       with:
         registry: us-central1-docker.pkg.dev
-        username: ${{ secrets.GAR_LOGIN }}
+        username: _json_key
         password: ${{ secrets.GAR_SECRET_KEY }}
 
     - name: Build the image and push to quay.io if not a pull request
