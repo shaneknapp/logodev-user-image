@@ -29,19 +29,14 @@ jobs:
     - name: Checkout files in repo
       uses: actions/checkout@main
 
-    - name: log in to GAR
-      uses: docker/login-action@v2
-      with:
-        registry: us-central1-docker.pkg.dev
-        username: _json_key
-        password: ${{ secrets.GAR_SECRET_KEY }}
-
     - name: Build the image and push to quay.io if not a pull request
       uses: jupyterhub/repo2docker-action@master
       with:
         # Don't push the image during a PR build
         NO_PUSH: "${{ github.event_name == 'pull_request' }}"
         # Make sure username & password/token pair matches your registry credentials
+        DOCKER_USERNAME: _json_key
+        DOCKER_PASSWORD: $ {{ secrets.GAR_SECRET_KEY }}
         DOCKER_REGISTRY: us-central1-docker.pkg.dev
         IMAGE_NAME: ${{ secrets.GCP_PROJECT_ID }}/user-images/logodev-user-image
         # Disable pushing a 'latest' tag, as this often just causes confusion
