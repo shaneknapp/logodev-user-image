@@ -23,7 +23,7 @@ jobs:
     # This gives us a total of about 52G of free space, which should be enough for now
     - name: testing org secrets
       run: |
-        echo ${{ secrets.TEST }}
+        echo '${{ secrets.TEST }}'
 
     - name: cleanup disk space
       run: |
