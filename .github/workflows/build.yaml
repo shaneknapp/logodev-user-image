@@ -29,7 +29,7 @@ jobs:
     - name: Checkout files in repo
       uses: actions/checkout@main
 
-    - name: Build the image and push to quay.io if not a pull request
+    - name: Build the image and push to artifact registry if not a pull request
       uses: jupyterhub/repo2docker-action@master
       with:
         # Don't push the image during a PR build
