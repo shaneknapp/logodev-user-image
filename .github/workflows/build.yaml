@@ -26,6 +26,12 @@ jobs:
     - name: Checkout files in repo
       uses: actions/checkout@main
 
+    - name: can we even see the secrets?
+      run: |
+        echo "can we access the secrets..."
+        S=$ {{ secrets.GAR_SECRET_KEY }}
+        if [ -z ${S} ]; then echo "nope!"; else echo "yep!"; fi
+
     - name: Build the image and push to artifact registry if not a pull request
       uses: jupyterhub/repo2docker-action@master
       with:
