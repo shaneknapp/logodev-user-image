@@ -16,7 +16,7 @@ jobs:
     # https://github.com/actions/virtual-environments/issues/2606#issuecomment-772683150
     # and https://github.com/easimon/maximize-build-space/blob/b4d02c14493a9653fe7af06cc89ca5298071c66e/action.yml#L104
     # This gives us a total of about 52G of free space, which should be enough for now
-    - name: cleanup disk space
+    - name: Cleanup disk space
       run: |
         sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc
         df -h
@@ -24,7 +24,7 @@ jobs:
     - name: Checkout files in repo
       uses: actions/checkout@main
 
-    - name: Build the image and push to artifact registry if not a pull request
+    - name: Build and test the image
       uses: jupyterhub/repo2docker-action@master
       with:
         # Make sure username & password/token pair matches your registry credentials

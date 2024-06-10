@@ -26,19 +26,17 @@ jobs:
     - name: Checkout files in repo
       uses: actions/checkout@main
 
-    - name: can we even see the secrets?
+    - name: Log in to GAR
+      uses: docker/login-action@v1
       with:
-        S: $ {{ secrets.GAR_SECRET_KEY }}
-      run: |
-        echo "can we access the secrets..."
-        if [ -z ${S} ]; then echo "nope!"; else echo "yep!"; fi
+        registry: us-central1-docker.pkg.dev
+        username: _json_key
+        password: ${{ secrets.GAR_SECRET_KEY }}
 
-    - name: Build the image and push to artifact registry if not a pull request
+    - name: Build the image and push to artifact registry
       uses: jupyterhub/repo2docker-action@master
       with:
         # Make sure username & password/token pair matches your registry credentials
-        DOCKER_USERNAME: _json_key
-        DOCKER_PASSWORD: $ {{ secrets.GAR_SECRET_KEY }}
         DOCKER_REGISTRY: us-central1-docker.pkg.dev
         IMAGE_NAME: ucb-datahub-2018/user-images/logodev-user-image
         # Disable pushing a 'latest' tag, as this often just causes confusion
