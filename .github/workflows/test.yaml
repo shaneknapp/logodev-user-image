@@ -50,7 +50,7 @@ jobs:
             images/**
 
     - name: What files changed?
-      # if: steps.changed-files.outputs.any_changed == 'true'
+      if: steps.changed-files.outputs.any_changed == 'true'
       env:
           CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
       run: |
