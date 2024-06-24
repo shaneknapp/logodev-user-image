@@ -13,7 +13,7 @@ jobs:
     - name: test env vars
       run: |
         echo "DOCKER_CONFIG: $DOCKER_CONFIG"
-        echo "HUB: $HUB"
+        echo ${{ vars.HUB }}
 
     # For biggish images, github actions runs out of disk space.
     # So we cleanup some unwanted things in the disk image, and reclaim that space for our docker use
