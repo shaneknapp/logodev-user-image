@@ -24,7 +24,31 @@ jobs:
     - name: Checkout files in repo
       uses: actions/checkout@main
 
-    - name: Build and test the image
+    - name: See if the image config changed
+      id: changed-files-image
+      uses: tj-actions/changed-files@v44
+      with:
+          files: |
+            image:
+              - '!.github/**'
+              - '!images/**'
+              - '!image-tests/**'
+              - '**.bash'
+              - '**.r'
+              - '**.R'
+              - '**.sh'
+              - '**.py'
+              - '**.txt'
+              - '**.yaml'
+              - '**.yml'
+              - 'Dockerfile'
+              - 'infra-requirements.txt'
+              - 'postBuild'
+              - 'requirements.txt'
+              - 'start'
+
+    - name: Build and test the image if any image file changed
+      if: steps.changed-files-image.outputs.image_any_changed == 'true'
       uses: jupyterhub/repo2docker-action@master
       with:
         # Make sure username & password/token pair matches your registry credentials
