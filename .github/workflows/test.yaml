@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DOCKER_CONFIG: $HOME/.docker
+      HUB: logodev
 
     steps:
     - name: test env vars
@@ -66,8 +67,8 @@ jobs:
       uses: jupyterhub/repo2docker-action@master
       with:
         # Make sure username & password/token pair matches your registry credentials
-        DOCKER_REGISTRY: us-central1-docker.pkg.dev
-        IMAGE_NAME: ucb-datahub-2018/user-images/logodev-user-image
+        #DOCKER_REGISTRY: us-central1-docker.pkg.dev
+        #IMAGE_NAME: ucb-datahub-2018/user-images/logodev-user-image
         NO_PUSH: "true"
         # Put repo contents in /srv/repo, rather than the default (/home/jovyan). The home directory
         # is mounted over by persistent storage when we are using the built image in a JupyterHub, and
