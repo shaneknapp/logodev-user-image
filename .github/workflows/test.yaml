@@ -48,7 +48,7 @@ jobs:
               - 'start'
 
     - name: is this working
-      if: steps.changed-files-image.outputs.image_any_changed == 'true'
+      # if: steps.changed-files-image.outputs.image_any_changed == 'true'
       env:
           TEST_ALL_CHANGED_FILES: ${{ steps.changed-files-image.outputs.image_all_changed_files }}
       run: |
