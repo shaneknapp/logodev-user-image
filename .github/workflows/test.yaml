@@ -47,6 +47,15 @@ jobs:
               - 'requirements.txt'
               - 'start'
 
+    - name: is this working
+      if: steps.changed-files-image.outputs.image_any_changed == 'true'
+      env:
+          TEST_ALL_CHANGED_FILES: ${{ steps.changed-files-image.outputs.image_all_changed_files }}
+      run: |
+          echo "One or more test file(s) has changed."
+          echo "List all the files that have changed: $TEST_ALL_CHANGED_FILES"
+
+
     - name: Build and test the image if any image file changed
       if: steps.changed-files-image.outputs.image_any_changed == 'true'
       uses: jupyterhub/repo2docker-action@master
