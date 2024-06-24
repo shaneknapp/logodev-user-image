@@ -45,6 +45,7 @@ jobs:
               postBuild
               requirements.txt
               start
+          files_ignore: .github/**
 
     - name: is this working
       # if: steps.changed-files.outputs.any_changed == 'true'
