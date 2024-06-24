@@ -13,7 +13,7 @@ jobs:
     - name: test env vars
       run: |
         echo "DOCKER_CONFIG: $DOCKER_CONFIG"
-        echo ${{ env.HUB }}
+        echo $HUB
 
     # For biggish images, github actions runs out of disk space.
     # So we cleanup some unwanted things in the disk image, and reclaim that space for our docker use
@@ -26,7 +26,7 @@ jobs:
         df -h
 
     - name: Checkout files in repo
-      uses: actions/checkout@main
+      uses: actions/checkout@v4
 
     - name: See if the image config changed
       id: changed-files
