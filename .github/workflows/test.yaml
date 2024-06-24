@@ -29,34 +29,33 @@ jobs:
       uses: tj-actions/changed-files@v44
       with:
           files: |
-              !.github/workflows/**
-              !images/**
-              !image-tests/**
-              **.bash
-              **.py
-              **.r
-              **.R
-              **.sh
-              **.txt
-              **.yaml
-              **.yml
-              Dockerfile
-              infra-requirements.txt
-              postBuild
-              requirements.txt
-              start
+            **.bash
+            **.py
+            **.r
+            **.R
+            **.sh
+            **.txt
+            **.toml
+            **.yaml
+            **.yml
+            Dockerfile
+            infra-requirements.txt
+            Pipfile**
+            postBuild
+            requirements.txt
+            setup.py
+            start
           files_ignore: |
-              .github/**
-              images/**
+            .github/**
+            images/**
 
-    - name: is this working
+    - name: What files changed?
       # if: steps.changed-files.outputs.any_changed == 'true'
       env:
-          TEST_ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
       run: |
-          echo "One or more test file(s) has changed."
-          echo "List all the files that have changed: $TEST_ALL_CHANGED_FILES"
-
+          echo "One or more image file(s) has changed."
+          echo "$CHANGED_FILES"
 
     - name: Build and test the image if any image file changed
       if: steps.changed-files.outputs.any_changed == 'true'
