@@ -29,7 +29,7 @@ jobs:
       uses: tj-actions/changed-files@v44
       with:
           files: |
-              !.github/**
+              !.github/workflows/**
               !images/**
               !image-tests/**
               **.bash
