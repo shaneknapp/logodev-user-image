@@ -29,6 +29,8 @@ jobs:
       uses: tj-actions/changed-files@v44
       with:
           files: |
+            infra:
+              - '.github/**'
             image:
               - '!.github/**'
               - '!images/**'
@@ -50,7 +52,7 @@ jobs:
     - name: is this working
       # if: steps.changed-files-image.outputs.image_any_changed == 'true'
       env:
-          TEST_ALL_CHANGED_FILES: ${{ steps.changed-files-image.outputs.image_all_changed_files }}
+          TEST_ALL_CHANGED_FILES: ${{ steps.changed-files-image.outputs.infra_all_changed_files }}
       run: |
           echo "One or more test file(s) has changed."
           echo "List all the files that have changed: $TEST_ALL_CHANGED_FILES"
