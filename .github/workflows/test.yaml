@@ -29,9 +29,9 @@ jobs:
       uses: tj-actions/changed-files@v44
       with:
           files: |
-              '!.github/**'
-              '!images/**'
-              '!image-tests/**'
+              !.github/**
+              !images/**
+              !image-tests/**
               **.bash
               **.py
               **.r
