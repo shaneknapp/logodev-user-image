@@ -30,24 +30,24 @@ jobs:
       with:
           files: |
             infra:
-              - .github/**
+              .github/**
             image:
-              - '!.github/**'
-              - '!images/**'
-              - '!image-tests/**'
-              - '**.bash'
-              - '**.py'
-              - '**.r'
-              - '**.R'
-              - '**.sh'
-              - '**.txt'
-              - '**.yaml'
-              - '**.yml'
-              - 'Dockerfile'
-              - 'infra-requirements.txt'
-              - 'postBuild'
-              - 'requirements.txt'
-              - 'start'
+              '!.github/**'
+              '!images/**'
+              '!image-tests/**'
+              **.bash
+              **.py
+              **.r
+              **.R
+              **.sh
+              **.txt
+              **.yaml
+              **.yml
+              Dockerfile
+              infra-requirements.txt
+              postBuild
+              requirements.txt
+              start
 
     - name: is this working
       # if: steps.changed-files.outputs.image_any_changed == 'true'
