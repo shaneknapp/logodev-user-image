@@ -22,8 +22,9 @@ jobs:
         df -h
 
     - name: Checkout files in repo
-      uses: actions/checkout@main
+      uses: actions/checkout@v4
       with:
+        repository: 'berkeley-dsep-infra/datahub'
         sparse-checkout: |
           deployments/logodev
 
