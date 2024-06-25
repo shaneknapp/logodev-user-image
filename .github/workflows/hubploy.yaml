@@ -9,6 +9,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      HUB: logodev
     steps:
 
     # For biggish images, github actions runs out of disk space.
@@ -26,7 +28,7 @@ jobs:
       with:
         repository: 'berkeley-dsep-infra/datahub'
         sparse-checkout: |
-          deployments/logodev
+          deployments/$HUB
 
     - name: install python + requirements
       uses: actions/setup-python@v5
@@ -37,7 +39,7 @@ jobs:
 
     - name: see if the correct dir has been checked out, and the requirements have been installed
       run: |
-        ls -la deployments/logodev
+        ls -la deployments/$HUB
         pip freeze
 
     # Lets us monitor disks getting full as images get bigger over time
