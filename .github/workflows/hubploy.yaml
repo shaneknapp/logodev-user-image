@@ -22,8 +22,6 @@ jobs:
       run: |
         sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc
         df -h
-    - name: install tree
-      run: sudo apt-get install tree
 
     - name: Checkout files in repo
       uses: actions/checkout@v4
@@ -31,7 +29,7 @@ jobs:
         repository: 'berkeley-dsep-infra/datahub'
         sparse-checkout: |
           hub/
-          'deployments/${{ env.HUB }}'
+          deployments/
 
     - name: install python + requirements
       uses: actions/setup-python@v5
