@@ -31,7 +31,7 @@ jobs:
         repository: 'berkeley-dsep-infra/datahub'
         sparse-checkout: |
           hub/
-          deployments/$HUB
+          'deployments/$HUB'
 
     - name: install python + requirements
       uses: actions/setup-python@v5
