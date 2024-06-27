@@ -61,6 +61,7 @@ jobs:
         uses: jupyterhub/repo2docker-action@master
         with:
           REPO_DIR: /srv/repo
+          NO_PUSH: true
 
       # Lets us monitor disks getting full as images get bigger over time
       - name: Show how much disk space is left
