@@ -89,5 +89,8 @@ gitg
 qgit
 meld
 
+libnss3
+libnspr4
+
 # For jupyter-tree-download. Ref: https://github.com/berkeley-dsep-infra/datahub/issues/3979			
 zip
