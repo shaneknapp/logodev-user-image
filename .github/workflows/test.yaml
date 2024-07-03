@@ -15,7 +15,7 @@ jobs:
           echo "with vars:"
           echo ${{ vars.HUB }}
           echo "no vars:"
-          echo ${HUB}
+          echo "${HUB}"
 
       - name: Maximize build space
         if: steps.changed-files.outputs.any_changed == 'true'
