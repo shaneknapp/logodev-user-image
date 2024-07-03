@@ -13,7 +13,15 @@ jobs:
       HUB: logodev
 
     steps:
-      - name: Test changed-files
+      - name: Maximize build space
+        if: steps.changed-files.outputs.any_changed == 'true'
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 512
+          swap-size-mb: 1024
+          remove-dotnet: 'true'
+
+      - name: Check out the repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
@@ -42,18 +50,6 @@ jobs:
           files_ignore: |
             .github/**
             images/**
-      # NOTE: `since_last_remote_commit: true` is implied by default and falls back to the previous local commit.
-
-      # For biggish images, github actions runs out of disk space.
-      # So we cleanup some unwanted things in the disk image, and reclaim that space for our docker use
-      # https://github.com/actions/virtual-environments/issues/2606#issuecomment-772683150
-      # and https://github.com/easimon/maximize-build-space/blob/b4d02c14493a9653fe7af06cc89ca5298071c66e/action.yml#L104
-      # This gives us a total of about 52G of free space, which should be enough for now
-      - name: cleanup disk space
-        if: steps.changed-files.outputs.any_changed == 'true'
-        run: |
-          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc
-          df -h
 
       - name: Log in to GAR
         if: steps.changed-files.outputs.any_changed == 'true'
