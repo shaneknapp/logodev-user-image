@@ -12,6 +12,8 @@ jobs:
 
     steps:
       - name: Test if vars works
+        env:
+          HUB: ${{ vars.HUB }}
         run: |
           echo "with vars:"
           echo ${{ env.HUB }}
