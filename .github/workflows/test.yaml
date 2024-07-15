@@ -13,7 +13,7 @@ jobs:
         uses: jnus/json-variables@v1.0
         with:
           scope: test
-          configFile: '.github/workflows/environment.json'
+          configFile: 'environment.json'
           secrets: '${{ toJson(secrets) }}'
 
       - name: can we see the env var
