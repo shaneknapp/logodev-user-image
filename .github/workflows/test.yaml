@@ -2,18 +2,17 @@ name: Build and test container image
 
 on:
   pull_request:
+env:
+  HUB: ${{ vars.HUB }}
 
 jobs:
   test-build:
     runs-on: ubuntu-latest
     env:
       DOCKER_CONFIG: $HOME/.docker
-      HUB: ${{ vars.HUB }}
 
     steps:
       - name: Test if vars works
-        env:
-          HUB: ${{ vars.HUB }}
         run: |
           echo "with vars:"
           echo ${{ vars.HUB }}
