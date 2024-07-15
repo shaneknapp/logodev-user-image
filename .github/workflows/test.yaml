@@ -12,6 +12,8 @@ jobs:
       - name: Set environment specific variables
         uses: jnus/json-variables@4a442c701d13455259c65b315c7dce51d1c9edf7
         with:
+          scope:
+          secrets:
           configFile: '.github/workflows/environment.json'
 
       - name: can we see the env var
