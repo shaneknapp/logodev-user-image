@@ -19,8 +19,10 @@ jobs:
           echo ${{ vars.HUB }}
           echo "with env:"
           echo ${{ env.HUB }}
-          echo "no vars:"
+          echo "plain old env var:"
           echo "${HUB}"
+          echo "docker config for sanity:"
+          echo ${DOCKER_CONFIG}
 
       - name: Maximize build space
         uses: easimon/maximize-build-space@master
