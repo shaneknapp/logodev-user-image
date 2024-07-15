@@ -3,7 +3,11 @@
       {
         "Name": "HUB",
         "Value": "logodev",
-        "Scope": {}
+        "Scope": {
+            "Environment": [
+                "test"
+            ]
+        }
       }
     ]
 }
