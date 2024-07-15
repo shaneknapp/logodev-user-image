@@ -3,14 +3,13 @@ name: Build and test container image
 on:
   pull_request:
 env:
-  HUB: ${{ vars.HUB }}
+  HUB: logodev
 
 jobs:
   test-build:
     runs-on: ubuntu-latest
     env:
       DOCKER_CONFIG: $HOME/.docker
-
     steps:
       - name: Test if vars works
         run: |
