@@ -9,6 +9,9 @@ on:
 jobs:
   create-pr:
     runs-on: ubuntu-latest
+    env:
+      HUB: ${{ vars.HUB }}
+
     steps:
     - name: Test if vars works
       run: |

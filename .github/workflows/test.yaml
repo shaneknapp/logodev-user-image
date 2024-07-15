@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DOCKER_CONFIG: $HOME/.docker
+      HUB: ${{ vars.HUB }}
 
     steps:
       - name: Test if vars works
