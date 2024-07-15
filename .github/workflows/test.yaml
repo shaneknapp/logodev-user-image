@@ -10,7 +10,7 @@ jobs:
       DOCKER_CONFIG: $HOME/.docker
     steps:
       - name: Set environment specific variables
-        uses: jnus/json-variables@4a442c701d13455259c65b315c7dce51d1c9edf7
+        uses: jnus/json-variables@v1
         with:
           scope:
           secrets:
