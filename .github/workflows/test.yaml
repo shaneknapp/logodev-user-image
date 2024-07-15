@@ -20,7 +20,7 @@ jobs:
           echo "with env:"
           echo ${{ env.HUB }}
           echo "plain old env var:"
-          echo "${HUB}"
+          echo ${HUB}
           echo "docker config for sanity:"
           echo ${DOCKER_CONFIG}
 
