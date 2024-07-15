@@ -2,8 +2,6 @@ name: Build and test container image
 
 on:
   pull_request:
-env:
-  HUB: logodev
 
 jobs:
   test-build:
@@ -11,17 +9,14 @@ jobs:
     env:
       DOCKER_CONFIG: $HOME/.docker
     steps:
-      - name: Test if vars works
-        run: |
-          echo "with vars:"
-          echo ${{ vars.HUB }}
-          echo "with env:"
-          echo ${{ env.HUB }}
-          echo "plain old env var:"
-          echo ${HUB}
-          echo "docker config for sanity:"
-          echo ${DOCKER_CONFIG}
+      - name: Set environment specific variables
+        uses: jnus/json-variables@4a442c701d13455259c65b315c7dce51d1c9edf7
+        with:
+          configFile: '.github/workflows/environment.json'
 
+      - name: can we see the env var
+        run: |
+          echo ${{ env.HUB }}
       - name: Maximize build space
         uses: easimon/maximize-build-space@master
         with:
@@ -36,26 +31,9 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v44
         with:
-            files: |
-              **.bash
-              **.py
-              **.r
-              **.R
-              **.sh
-              **.txt
-              **.toml
-              **.yaml
-              **.yml
-              Dockerfile
-              infra-requirements.txt
-              Pipfile**
-              postBuild
-              requirements.txt
-              setup.py
-              start
-            files_ignore: |
-              .github/**
-              images/**
+          files_ignore: |
+            .github/**
+            images/**
 
       - name: What files changed?
         if: steps.changed-files.outputs.any_changed == 'true'
