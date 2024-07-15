@@ -2,8 +2,7 @@
     "Variables": [
       {
         "Name": "HUB",
-        "Value": "logodev",
-        "Scope": { }
+        "Value": "logodev"
       }
     ]
 }
