@@ -11,12 +11,17 @@ jobs:
     env:
       DOCKER_CONFIG: $HOME/.docker
       HUB: ${{ vars.HUB }}
-      IMAGE: ucb-datahub-2018/user-images/${HUB}-user-image
 
     steps:
-      - name: Print out image name
+      - name: Generate the image name
         run: |
-          echo "Preparing to build and push $IMAGE for $HUB"
+          IMAGE="ucb-datahub-2018/user-images/${HUB}-user-image"
+          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
+
+      - name: Echo the image and hub names
+        run: |
+          echo "$IMAGE"
+          echo "$HUB"
 
       - name: Maximize build space
         if: steps.changed-files.outputs.any_changed == 'true'
