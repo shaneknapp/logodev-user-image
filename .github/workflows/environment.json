@@ -1,0 +1,13 @@
+{
+    "Variables": [
+      {
+        "Name": "HUB",
+        "Value": "logodev",
+        "Scope": {
+            "Environment": [
+                "test"
+            ]
+        }
+      }
+    ]
+}
