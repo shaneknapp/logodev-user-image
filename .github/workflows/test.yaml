@@ -35,11 +35,6 @@ jobs:
             echo "One or more image file(s) has changed:"
             echo "$CHANGED_FILES"
 
-      - name: Say something if no files changed
-        if: steps.changed-files.outputs.any_changed == 'false'
-        run: |
-            echo "No files have changed, skipping image build"
-
       - name: Build and test the image if any image file changed
         if: steps.changed-files.outputs.any_changed == 'true'
         uses: jupyterhub/repo2docker-action@master
