@@ -41,7 +41,7 @@ jobs:
         repository: 'berkeley-dsep-infra/datahub'
         sparse-checkout: |
           hub/
-          deployments/${HUB}
+          deployments/
 
     - name: see if the correct dir has been checked out, and the requirements have been installed
       run: |

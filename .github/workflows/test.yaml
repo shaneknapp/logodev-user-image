@@ -9,16 +9,6 @@ jobs:
     env:
       DOCKER_CONFIG: $HOME/.docker
     steps:
-      - name: Set environment specific variables
-        uses: jnus/json-variables@v1.0
-        with:
-          scope: test
-          configFile: 'environment.json'
-          secrets: '${{ toJson(secrets) }}'
-
-      - name: can we see the env var
-        run: |
-          echo ${{ env.HUB }}
       - name: Maximize build space
         uses: easimon/maximize-build-space@master
         with:
@@ -44,6 +34,11 @@ jobs:
         run: |
             echo "One or more image file(s) has changed:"
             echo "$CHANGED_FILES"
+
+      - name: Say something if no files changed
+        if: steps.changed-files.outputs.any_changed == 'false'
+        run: |
+            echo "No files have changed, skipping image build"
 
       - name: Build and test the image if any image file changed
         if: steps.changed-files.outputs.any_changed == 'true'

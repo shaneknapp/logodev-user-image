@@ -10,9 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DOCKER_CONFIG: $HOME/.docker
-      HUB: logodev
+      HUB: ${{ vars.HUB }}
+      IMAGE: ucb-datahub-2018/user-images/${{ HUB }}-user-image
 
     steps:
+      - name: Print out image name
+        run: |
+          echo "Preparing to build and push $IMAGE"
+
       - name: Maximize build space
         if: steps.changed-files.outputs.any_changed == 'true'
         uses: easimon/maximize-build-space@master
@@ -30,23 +35,6 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v44
         with:
-          files: |
-            **.bash
-            **.py
-            **.r
-            **.R
-            **.sh
-            **.txt
-            **.toml
-            **.yaml
-            **.yml
-            Dockerfile
-            infra-requirements.txt
-            Pipfile**
-            postBuild
-            requirements.txt
-            setup.py
-            start
           files_ignore: |
             .github/**
             images/**
@@ -65,7 +53,7 @@ jobs:
         with:
           # Make sure username & password/token pair matches your registry credentials
           DOCKER_REGISTRY: us-central1-docker.pkg.dev
-          IMAGE_NAME: ucb-datahub-2018/user-images/logodev-user-image
+          IMAGE_NAME: ucb-datahub-2018/user-images/${IMAGE}
           # Disable pushing a 'latest' tag, as this often just causes confusion
           # LATEST_TAG_OFF: true
           # Put repo contents in /srv/repo, rather than the default (/home/jovyan). The home directory
