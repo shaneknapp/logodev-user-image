@@ -11,12 +11,12 @@ jobs:
     env:
       DOCKER_CONFIG: $HOME/.docker
       HUB: ${{ vars.HUB }}
-      IMAGE: ucb-datahub-2018/user-images/${{ HUB }}-user-image
+      IMAGE: ucb-datahub-2018/user-images/${HUB}-user-image
 
     steps:
       - name: Print out image name
         run: |
-          echo "Preparing to build and push $IMAGE"
+          echo "Preparing to build and push $IMAGE for $HUB"
 
       - name: Maximize build space
         if: steps.changed-files.outputs.any_changed == 'true'
