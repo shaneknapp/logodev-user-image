@@ -14,41 +14,46 @@ jobs:
       IMAGE: "ucb-datahub-2018/user-images/${HUB}-user-image"
 
     steps:
-    - name: Test if vars works
-      run: |
-        echo "image:"
-        echo ${IMAGE}
-        echo "no vars:"
-        echo ${HUB}
+      - name: Generate the image name
+        run: |
+          IMAGE="ucb-datahub-2018/user-images/${HUB}-user-image"
+          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
 
-    - name: Maximize build space
-      uses: easimon/maximize-build-space@master
-      with:
-        root-reserve-mb: 512
-        swap-size-mb: 1024
-        remove-dotnet: 'true'
+      - name: Test if vars works
+        run: |
+          echo "with vars:"
+          echo ${{ vars.HUB }}
+          echo "no vars:"
+          echo ${HUB}
 
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 512
+          swap-size-mb: 1024
+          remove-dotnet: 'true'
 
-    - name: Display free space
-      run: |
-        echo "Free space:"
-        df -h
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Checkout files in repo
-      uses: actions/checkout@v4
-      with:
-        repository: 'berkeley-dsep-infra/datahub'
-        sparse-checkout: |
-          hub/
-          deployments/
+      - name: Display free space
+        run: |
+          echo "Free space:"
+          df -h
 
-    - name: see if the correct dir has been checked out, and the requirements have been installed
-      run: |
-        ls -la
-        tree
+      - name: Checkout files in repo
+        uses: actions/checkout@v4
+        with:
+          repository: 'berkeley-dsep-infra/datahub'
+          sparse-checkout: |
+            hub/
+            deployments/
 
-    # Lets us monitor disks getting full as images get bigger over time
-    - name: Show how much disk space is left
-      run: df -h
+      - name: see if the correct dir has been checked out, and the requirements have been installed
+        run: |
+          ls -la
+          tree
+
+      # Lets us monitor disks getting full as images get bigger over time
+      - name: Show how much disk space is left
+        run: df -h
