@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HUB: ${{ vars.HUB }}
+      IMAGE: "ucb-datahub-2018/user-images/${HUB}-user-image"
 
     steps:
       - name: Generate the image name
