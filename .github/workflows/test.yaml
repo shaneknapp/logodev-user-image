@@ -47,6 +47,10 @@ jobs:
           REPO_DIR: /srv/repo
           NO_PUSH: true
 
+      - name: print the image name
+        run: |
+          echo ${{ steps.build-and-push.outputs.IMAGE_SHA_TAG }}
+
       # Lets us monitor disks getting full as images get bigger over time
       - name: Show how much disk space is left
         run: df -h
