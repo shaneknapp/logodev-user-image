@@ -24,14 +24,6 @@ jobs:
           echo "$IMAGE"
           echo "$HUB"
 
-      - name: Maximize build space
-        if: steps.changed-files.outputs.any_changed == 'true'
-        uses: easimon/maximize-build-space@v10
-        with:
-          root-reserve-mb: 1024
-          swap-size-mb: 1024
-          remove-dotnet: 'true'
-
       - name: Check out the repo
         uses: actions/checkout@v4
         with:
@@ -44,6 +36,14 @@ jobs:
           files_ignore: |
             .github/**
             images/**
+
+      - name: Maximize build space
+        if: steps.changed-files.outputs.any_changed == 'true'
+        uses: easimon/maximize-build-space@v10
+        with:
+          root-reserve-mb: 1024
+          swap-size-mb: 1024
+          remove-dotnet: 'true'
 
       - name: Log in to GAR
         if: steps.changed-files.outputs.any_changed == 'true'
