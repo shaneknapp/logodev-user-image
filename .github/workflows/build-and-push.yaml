@@ -12,7 +12,7 @@ jobs:
       DOCKER_CONFIG: $HOME/.docker
       HUB: ${{ vars.HUB }}
     outputs:
-      image-name: ${{ steps.build-and-push.outputs.image-name }}
+      image-tag: ${{ steps.build-and-push.outputs.image-tag }}
     steps:
       - name: Generate the image name
         run: |
@@ -69,8 +69,9 @@ jobs:
           # working, as it is needed in runtime.
           REPO_DIR: /srv/repo
 
-      - name: Store the image name
-        id: store-image-name
+      - name: print the image name
+        run: |
+          echo ${{ steps.build-and-push.outputs.IMAGE_SHA_TAG }}
 
       # Lets us monitor disks getting full as images get bigger over time
       - name: Show how much disk space is left
