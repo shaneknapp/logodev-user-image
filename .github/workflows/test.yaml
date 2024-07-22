@@ -9,12 +9,17 @@ jobs:
     env:
       DOCKER_CONFIG: $HOME/.docker
     steps:
-      - name: Maximize build space
-        uses: easimon/maximize-build-space@master
-        with:
-          root-reserve-mb: 10840
-          swap-size-mb: 1024
-          remove-dotnet: 'true'
+      - name: cleanup disk space
+        run: |
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc
+          df -h
+
+#      - name: Maximize build space
+#        uses: easimon/maximize-build-space@master
+#        with:
+#          root-reserve-mb: 10840
+#          swap-size-mb: 1024
+#          remove-dotnet: 'true'
 
       - name: Checkout files in repo
         uses: actions/checkout@v4
