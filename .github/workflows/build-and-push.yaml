@@ -64,12 +64,10 @@ jobs:
           REPO_DIR: /srv/repo
 
       - name: print the image name
-        if: steps.changed-files.outputs.any_changed == 'true'
         run: |
           echo ${{ steps.build-and-push.outputs.IMAGE_SHA_TAG }}
 
       - name: Save image tag as an artifact
-        if: steps.changed-files.outputs.any_changed == 'true'
         run: echo ${{ steps.build-and-push.outputs.IMAGE_SHA_TAG }} > image-tag.txt
       - uses: actions/upload-artifact@v4
         with:
