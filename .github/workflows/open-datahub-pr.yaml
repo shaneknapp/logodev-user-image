@@ -12,13 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HUB: ${{ vars.HUB }}
-      IMAGE: "ucb-datahub-2018/user-images/${HUB}-user-image"
-
+      IMAGE: ${{ vars.IMAGE }}
+    outputs:
+      artifact-downloaded: ${{ steps.download-artifact.outputs.test-artifact }}
     steps:
-      - name: Generate the image name
+      - name: cleanup disk space
         run: |
-          IMAGE="ucb-datahub-2018/user-images/${HUB}-user-image"
-          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc
+          df -h
 
       - name: Test if vars works
         run: |
@@ -26,13 +27,6 @@ jobs:
           echo ${{ vars.IMAGE }}
           echo "no vars:"
           echo ${IMAGE}
-
-      - name: Maximize build space
-        uses: easimon/maximize-build-space@master
-        with:
-          root-reserve-mb: 512
-          swap-size-mb: 1024
-          remove-dotnet: 'true'
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -42,18 +36,46 @@ jobs:
           echo "Free space:"
           df -h
 
+      - name: download artifact with image tag
+        uses: actions/download-artifact@v4
+        with:
+          name: image-tag.txt
+          path: ./
+
+      - name: sanity check on downloaded artifact
+        run: |
+          ls -la
+          cat image-tag.txt
+
+      - name: test if image-tag.txt was downloaded
+        id: test-artifact
+        run: |
+          if test -f image-tag.txt; then
+            echo "::set-output name=artifact-downloaded::true"
+          else
+            echo "::set-output name=artifact-downloaded::false"
+          fi
+
+      - name: Parse image tag
+        if: steps.test-artifact.outputs.artifact-downloaded == 'true'
+        run: |
+          IMAGE_TAG=$(cat image-tag.txt)
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+
       - name: Checkout files in repo
         uses: actions/checkout@v4
         with:
           repository: 'berkeley-dsep-infra/datahub'
           sparse-checkout: |
             hub/
-            deployments/
+            deployments/${HUB}
 
       - name: see if the correct dir has been checked out, and the requirements have been installed
         run: |
           ls -la
           tree
+
+
 
       # Lets us monitor disks getting full as images get bigger over time
       - name: Show how much disk space is left
