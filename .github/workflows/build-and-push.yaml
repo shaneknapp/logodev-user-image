@@ -11,6 +11,7 @@ jobs:
     env:
       DOCKER_CONFIG: $HOME/.docker
       HUB: ${{ vars.HUB }}
+      IMAGE: ${{ vars.IMAGE }}
     outputs:
       image-tag: ${{ steps.build-and-push.outputs.image-tag }}
 
@@ -19,11 +20,6 @@ jobs:
         run: |
           sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc
           df -h
-
-      - name: Generate the image name
-        run: |
-          IMAGE="ucb-datahub-2018/user-images/${HUB}-user-image"
-          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
 
       - name: Display the image and hub names
         run: |
