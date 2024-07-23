@@ -13,17 +13,13 @@ jobs:
     env:
       HUB: ${{ vars.HUB }}
       IMAGE: ${{ vars.IMAGE }}
-
+    outputs:
+      artifact-downloaded: ${{ steps.download-artifact.outputs.test-artifact }}
     steps:
       - name: cleanup disk space
         run: |
           sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc
           df -h
-
-      - name: Generate the image name
-        run: |
-          IMAGE="ucb-datahub-2018/user-images/${HUB}-user-image"
-          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
 
       - name: Test if vars works
         run: |
@@ -40,6 +36,32 @@ jobs:
           echo "Free space:"
           df -h
 
+      - name: download artifact with image tag
+        uses: actions/download-artifact@v4
+        with:
+          name: image-tag.txt
+          path: ./
+
+      - name: sanity check on downloaded artifact
+        run: |
+          ls -la
+          cat image-tag.txt
+
+      - name: test if image-tag.txt was downloaded
+        id: test-artifact
+        run: |
+          if test -f image-tag.txt; then
+            echo "::set-output name=artifact-downloaded::true"
+          else
+            echo "::set-output name=artifact-downloaded::false"
+          fi
+
+      - name: Parse image tag
+        if: steps.test-artifact.outputs.artifact-downloaded == 'true'
+        run: |
+          IMAGE_TAG=$(cat image-tag.txt)
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+
       - name: Checkout files in repo
         uses: actions/checkout@v4
         with:
@@ -48,16 +70,12 @@ jobs:
             hub/
             deployments/${HUB}
 
-      - name: download artifact with image tag
-        uses: actions/download-artifact@v4
-        with:
-          name: image-tag.txt
-          path: ./
-
       - name: see if the correct dir has been checked out, and the requirements have been installed
         run: |
           ls -la
           tree
+
+
 
       # Lets us monitor disks getting full as images get bigger over time
       - name: Show how much disk space is left
