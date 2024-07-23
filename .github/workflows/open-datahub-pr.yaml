@@ -15,6 +15,11 @@ jobs:
       IMAGE: "ucb-datahub-2018/user-images/${HUB}-user-image"
 
     steps:
+      - name: cleanup disk space
+        run: |
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc
+          df -h
+
       - name: Generate the image name
         run: |
           IMAGE="ucb-datahub-2018/user-images/${HUB}-user-image"
@@ -26,13 +31,6 @@ jobs:
           echo ${{ vars.IMAGE }}
           echo "no vars:"
           echo ${IMAGE}
-
-      - name: Maximize build space
-        uses: easimon/maximize-build-space@master
-        with:
-          root-reserve-mb: 512
-          swap-size-mb: 1024
-          remove-dotnet: 'true'
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -48,7 +46,13 @@ jobs:
           repository: 'berkeley-dsep-infra/datahub'
           sparse-checkout: |
             hub/
-            deployments/
+            deployments/${HUB}
+
+      - name: download artifact with image tag
+        uses: actions/download-artifact@v4
+        with:
+          name: image-tag.txt
+          path: ./
 
       - name: see if the correct dir has been checked out, and the requirements have been installed
         run: |

@@ -14,13 +14,6 @@ jobs:
           sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc
           df -h
 
-#      - name: Maximize build space
-#        uses: easimon/maximize-build-space@master
-#        with:
-#          root-reserve-mb: 10840
-#          swap-size-mb: 1024
-#          remove-dotnet: 'true'
-
       - name: Checkout files in repo
         uses: actions/checkout@v4
 
@@ -40,17 +33,13 @@ jobs:
             echo "One or more image file(s) has changed:"
             echo "$CHANGED_FILES"
 
-      - name: Build and test the image if any image file changed
+      - name: Build and test the image if any image file(s) changed
         id: build-and-test
         if: steps.changed-files.outputs.any_changed == 'true'
         uses: jupyterhub/repo2docker-action@master
         with:
           REPO_DIR: /srv/repo
           NO_PUSH: true
-
-      - name: print the image name
-        run: |
-          echo ${{ steps.build-and-test.outputs.IMAGE_SHA_TAG }}
 
       # Lets us monitor disks getting full as images get bigger over time
       - name: Show how much disk space is left
