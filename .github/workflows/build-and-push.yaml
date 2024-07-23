@@ -54,7 +54,7 @@ jobs:
         with:
           # Make sure username & password/token pair matches your registry credentials
           DOCKER_REGISTRY: us-central1-docker.pkg.dev
-          IMAGE_NAME: "${IMAGE}"
+          IMAGE_NAME: $IMAGE
           # Disable pushing a 'latest' tag, as this often just causes confusion
           LATEST_TAG_OFF: true
           # Put repo contents in /srv/repo, rather than the default (/home/jovyan). The home directory
