@@ -63,18 +63,24 @@ jobs:
           # working, as it is needed in runtime.
           REPO_DIR: /srv/repo
 
-      - name: print the image name
+      - name: print the image tag
+        if: steps.changed-files.outputs.any_changed == 'true'
         run: |
           echo ${{ steps.build-and-push.outputs.IMAGE_SHA_TAG }}
 
-      - name: Save image tag as an artifact
-        run: echo ${{ steps.build-and-push.outputs.IMAGE_SHA_TAG }} > image-tag.txt
-      - uses: actions/upload-artifact@v4
-        with:
-          name: image-tag
-          path: ./image-tag.txt
-          compression-level: 0
+      - name: store the image tag as an env var
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: |
+          IMAGE_TAG=${{ steps.build-and-push.outputs.IMAGE_SHA_TAG }}
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
 
       # Lets us monitor disks getting full as images get bigger over time
       - name: Show how much disk space is left
         run: df -h
+
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: print the hash
+        run: |
+          echo $IMAGE_TAG
