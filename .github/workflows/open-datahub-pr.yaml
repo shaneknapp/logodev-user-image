@@ -41,11 +41,12 @@ jobs:
         with:
           name: image-tag
           path: ./
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: sanity check on downloaded artifact
         run: |
           ls -la
-          cat image-tag.txt
+          #cat image-tag.txt
 
       - name: test if image-tag.txt was downloaded
         id: test-artifact
