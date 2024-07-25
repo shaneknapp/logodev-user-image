@@ -39,12 +39,11 @@ jobs:
       - name: download artifact with image tag
         uses: actions/download-artifact@v4
         with:
-          name: image-tag
-          path: ./
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: sanity check on downloaded artifact
         run: |
+          unzip image-tag.txt
           ls -la
           #cat image-tag.txt
 
