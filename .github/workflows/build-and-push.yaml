@@ -90,3 +90,16 @@ jobs:
           else
             echo "IMAGE_TAG is not empty"
           fi
+
+      - name: Checkout files in repo
+        uses: actions/checkout@v4
+        with:
+          repository: 'berkeley-dsep-infra/datahub'
+          sparse-checkout: |
+            hub/
+            deployments/${HUB}
+
+      - name: see if the correct dir has been checked out, and the requirements have been installed
+        run: |
+          ls -la
+          tree
