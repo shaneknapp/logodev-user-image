@@ -39,7 +39,7 @@ jobs:
       - name: download artifact with image tag
         uses: actions/download-artifact@v4
         with:
-          name: image-tag.txt
+          name: image-tag
           path: ./
 
       - name: sanity check on downloaded artifact
