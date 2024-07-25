@@ -64,12 +64,10 @@ jobs:
           REPO_DIR: /srv/repo
 
       - name: print the image tag
-        if: steps.changed-files.outputs.any_changed == 'true'
         run: |
           echo ${{ steps.build-and-push.outputs.IMAGE_SHA_TAG }}
 
       - name: store the image tag as an env var
-        if: steps.changed-files.outputs.any_changed == 'true'
         run: |
           IMAGE_TAG=${{ steps.build-and-push.outputs.IMAGE_SHA_TAG }}
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
@@ -84,3 +82,11 @@ jobs:
       - name: print the hash
         run: |
           echo $IMAGE_TAG
+
+      - name: logic test
+        run: |
+          if [ -z "$IMAGE_TAG" ]; then
+            echo "IMAGE_TAG is empty"
+          else
+            echo "IMAGE_TAG is not empty"
+          fi
