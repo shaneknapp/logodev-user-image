@@ -54,7 +54,7 @@ jobs:
         with:
           # Make sure username & password/token pair matches your registry credentials
           DOCKER_REGISTRY: us-central1-docker.pkg.dev
-          IMAGE_NAME: $IMAGE
+          IMAGE_NAME: ucb-datahub-2018/user-images/logodev-user-image
           # Disable pushing a 'latest' tag, as this often just causes confusion
           LATEST_TAG_OFF: true
           # Put repo contents in /srv/repo, rather than the default (/home/jovyan). The home directory
@@ -89,9 +89,9 @@ jobs:
       - name: logic test
         run: |
           if [ -z "$IMAGE_TAG" ]; then
-            echo "IMAGE_TAG is empty"
+            echo "CREATE_PR=false" >> $GITHUB_ENV
           else
-            echo "IMAGE_TAG is not empty"
+            echo "CREATE_PR=true" >> $GITHUB_ENV
           fi
 
       - name: Checkout files in repo
