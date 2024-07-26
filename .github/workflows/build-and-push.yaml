@@ -13,7 +13,7 @@ jobs:
       HUB: ${{ vars.HUB }}
       IMAGE: ${{ vars.IMAGE }}
     outputs:
-      image-tag: ${{ steps.build-and-push.outputs.image-tag }}
+      image-tag: ${{ steps.build-and-push.outputs.IMAGE_SHA_TAG }}
 
     steps:
       - name: cleanup disk space
