@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DOCKER_CONFIG: $HOME/.docker
-      HUB: ${{ vars.HUB }}
       IMAGE: ${{ vars.IMAGE }}
     outputs:
       image-tag: ${{ steps.build-and-push.outputs.IMAGE_SHA_TAG }}
@@ -54,7 +53,8 @@ jobs:
         with:
           # Make sure username & password/token pair matches your registry credentials
           DOCKER_REGISTRY: us-central1-docker.pkg.dev
-          IMAGE_NAME: ucb-datahub-2018/user-images/logodev-user-image
+          IMAGE_NAME: ${{ env.IMAGE }}
+          #IMAGE_NAME: ucb-datahub-2018/user-images/logodev-user-image
           # Disable pushing a 'latest' tag, as this often just causes confusion
           LATEST_TAG_OFF: true
           # Put repo contents in /srv/repo, rather than the default (/home/jovyan). The home directory
@@ -63,15 +63,6 @@ jobs:
           # working, as it is needed in runtime.
           REPO_DIR: /srv/repo
 
-      - name: print the image tag
-        run: |
-          echo ${{ steps.build-and-push.outputs.IMAGE_SHA_TAG }}
-
-      - name: store the image tag as an env var
-        run: |
-          IMAGE_TAG=${{ steps.build-and-push.outputs.IMAGE_SHA_TAG }}
-          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
-
       # Lets us monitor disks getting full as images get bigger over time
       - name: Show how much disk space is left
         run: df -h
@@ -79,6 +70,9 @@ jobs:
   create-pr:
     runs-on: ubuntu-latest
     needs: build-and-push
+    env:
+      HUB: ${{ vars.HUB }}
+      IMAGE: ${{ vars.IMAGE }}
     steps:
       - name: print the hash
         run: |
@@ -86,21 +80,25 @@ jobs:
           echo ${{ needs.build-and-push.outputs.image-tag }}
           echo "IMAGE_TAG=${{ needs.build-and-push.outputs.image-tag }}" >> $GITHUB_ENV
 
-      - name: logic test
+      - name: logic test to see if we should create a PR
+        id: set-create-pr
         run: |
           if [ -z "$IMAGE_TAG" ]; then
             echo "CREATE_PR=false" >> $GITHUB_ENV
+            echo "::set-output name=create_pr::false"
           else
             echo "CREATE_PR=true" >> $GITHUB_ENV
+            echo "::set-output name=create_pr::true"
           fi
 
       - name: Checkout files in repo
+        if: ${{ steps.set-create-pr.outputs.create_pr }} == 'true'
         uses: actions/checkout@v4
         with:
           repository: 'berkeley-dsep-infra/datahub'
           sparse-checkout: |
             hub/
-            deployments/${HUB}
+            deployments/${{ env.HUB }}
 
       - name: see if the correct dir has been checked out, and the requirements have been installed
         run: |
