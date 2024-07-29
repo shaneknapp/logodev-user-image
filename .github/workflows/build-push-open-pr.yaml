@@ -1,5 +1,4 @@
 name: Build and push container image, open PR if needed
-# try to follow the example here:  https://gist.github.com/Daniel-ltw/552b90800b07c22e4a83dfa68ada6318
 on:
   push:
     branches:
