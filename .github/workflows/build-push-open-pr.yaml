@@ -107,7 +107,7 @@ jobs:
       - name: create feature branch
         if: ${{ env.CREATE_PR }} == 'true'
         run: |
-          git checkout -b update-${{ env.HUB }}-image-tag
+          git checkout -b update-${{ env.HUB }}-image-tag-${IMAGE_TAG}
 
       - name: update the image tag in hubploy.yaml for any deployments that use this image
         if: ${{ env.CREATE_PR }} == 'true'
@@ -126,6 +126,9 @@ jobs:
         run: |
           CHANGED_FILES=$(git status --porcelain -uno)
           echo "CHANGED_FILES=${CHANGED_FILES}"
+          echo
+          echo "GIT DIFF"
+          git diff
           #git config --unset-all http.https://github.com/.extraheader || true
           git add deployments/
           git commit -m "update ${HUB} image tag to ${IMAGE_TAG}: ${CHANGED_FILES}"
