@@ -107,14 +107,14 @@ jobs:
       - name: create feature branch
         if: ${{ env.CREATE_PR }} == 'true'
         run: |
-          git checkout -b update-${{ env.HUB }}-image-tag
+          git checkout -b update-${HUB}-image-tag-${IMAGE_TAG}
 
       - name: update the image tag in hubploy.yaml for any deployments that use this image
         if: ${{ env.CREATE_PR }} == 'true'
         run: |
-          for deployment in $(grep -lr ${{ env.IMAGE }} deployments/ | grep hubploy.yaml); do
+          for deployment in $(grep -lr ${IMAGE} deployments/ | grep hubploy.yaml); do
             echo "DEPLOYMENT=${deployment}"
-            old_hash=$(grep ${{ env.IMAGE }} ${deployment} | awk -F":" '{print $3}')
+            old_hash=$(grep ${IMAGE} ${deployment} | awk -F":" '{print $3}')
             new_hash=${IMAGE_TAG}
             sed -i -e "s/${old_hash}/${new_hash}/g" ${deployment}
           done
@@ -126,10 +126,13 @@ jobs:
         run: |
           CHANGED_FILES=$(git status --porcelain -uno)
           echo "CHANGED_FILES=${CHANGED_FILES}"
+          echo
+          echo "GIT DIFF"
+          git diff
           #git config --unset-all http.https://github.com/.extraheader || true
           git add deployments/
           git commit -m "update ${HUB} image tag to ${IMAGE_TAG}: ${CHANGED_FILES}"
-          git push origin update-${HUB}-image-tag
+          git push origin update-${HUB}-image-tag-${IMAGE_TAG}
 
       - name: print out a message if no PR is created
         if: ${{ env.CREATE_PR }} == 'false'
