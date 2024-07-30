@@ -92,6 +92,7 @@ jobs:
         if: ${{ env.CREATE_PR }} == 'true'
         uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           repository: 'berkeley-dsep-infra/datahub'
           sparse-checkout: |
             deployments/
@@ -125,6 +126,7 @@ jobs:
         run: |
           CHANGED_FILES=$(git status --porcelain -uno)
           echo "CHANGED_FILES=${CHANGED_FILES}"
+          git config --unset-all http.https://github.com/.extraheader || true
           git add deployments/
           git commit -m "update ${HUB} image tag to ${IMAGE_TAG}: ${CHANGED_FILES}"
           git push origin update-${HUB}-image-tag
