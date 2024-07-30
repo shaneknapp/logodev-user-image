@@ -121,7 +121,7 @@ jobs:
       - name: add, commit and push changes
         if: ${{ env.CREATE_PR }} == 'true'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.DATAHUB_PR_KEY }}
         run: |
           CHANGED_FILES=$(git status --porcelain -uno)
           git add deployments/
