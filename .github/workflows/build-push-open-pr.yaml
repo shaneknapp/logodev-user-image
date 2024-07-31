@@ -92,6 +92,7 @@ jobs:
         if: ${{ env.CREATE_PR }} == 'true'
         uses: actions/checkout@v4
         with:
+          token: ${{ secrets.DATAHUB_USER_IMAGE_BRANCH_PUSH }}
           fetch-depth: 0
           repository: 'berkeley-dsep-infra/datahub'
           sparse-checkout: |
@@ -121,8 +122,8 @@ jobs:
 
       - name: add, commit and push changes
         if: ${{ env.CREATE_PR }} == 'true'
-        env:
-          GITHUB_TOKEN: ${{ secrets.DATAHUB_USER_IMAGE_TAG_PUSH }}
+        #env:
+        #  GITHUB_TOKEN: ${{ secrets.DATAHUB_USER_IMAGE_TAG_PUSH }}
         run: |
           CHANGED_FILES=$(git status --porcelain -uno)
           echo "CHANGED_FILES=${CHANGED_FILES}"
@@ -130,8 +131,8 @@ jobs:
           echo "GIT DIFF"
           git diff
           #git config --unset-all http.https://github.com/.extraheader || true
-          echo https://x-access-token:${GITHUB_TOKEN}@github.com > ~/.git-credentials
-          git config credential.helper store
+          #echo https://x-access-token:${GITHUB_TOKEN}@github.com > ~/.git-credentials
+          #git config credential.helper store
           git add deployments/
           git commit -m "update ${HUB} image tag to ${IMAGE_TAG}: ${CHANGED_FILES}"
           git push origin update-${HUB}-image-tag
