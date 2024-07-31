@@ -107,7 +107,7 @@ jobs:
       - name: create feature branch
         if: ${{ env.CREATE_PR }} == 'true'
         run: |
-          git checkout -b update-${HUB}-image-tag-${IMAGE_TAG}
+          git checkout -b update-${HUB}-image-tag
 
       - name: update the image tag in hubploy.yaml for any deployments that use this image
         if: ${{ env.CREATE_PR }} == 'true'
@@ -122,7 +122,7 @@ jobs:
       - name: add, commit and push changes
         if: ${{ env.CREATE_PR }} == 'true'
         env:
-          GITHUB_TOKEN: ${{ secrets.IMAGE_BUILDING_PR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.DATAHUB_USER_IMAGE_TAG_PUSH }}
         run: |
           CHANGED_FILES=$(git status --porcelain -uno)
           echo "CHANGED_FILES=${CHANGED_FILES}"
@@ -130,9 +130,11 @@ jobs:
           echo "GIT DIFF"
           git diff
           #git config --unset-all http.https://github.com/.extraheader || true
+          echo https://x-access-token:${GITHUB_TOKEN}@github.com > ~/.git-credentials
+          git config credential.helper store
           git add deployments/
           git commit -m "update ${HUB} image tag to ${IMAGE_TAG}: ${CHANGED_FILES}"
-          git push origin update-${HUB}-image-tag-${IMAGE_TAG}
+          git push origin update-${HUB}-image-tag
 
       - name: print out a message if no PR is created
         if: ${{ env.CREATE_PR }} == 'false'
