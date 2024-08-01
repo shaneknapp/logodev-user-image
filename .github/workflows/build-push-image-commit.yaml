@@ -68,6 +68,7 @@ jobs:
       IMAGE_TAG: ${{ needs.build-and-push.outputs.image-tag }}
 
     steps:
+#
 #      - name: Store the image tag in an env variable
 #        run: |
 #          echo ${{ needs.build-and-push.outputs.image-tag }}
