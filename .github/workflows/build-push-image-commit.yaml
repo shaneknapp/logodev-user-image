@@ -113,7 +113,7 @@ jobs:
             git add ${f}
           done
           git commit -m "update ${HUB} image tag to ${IMAGE_TAG}: ${CHANGED_FILES}"
-          git push origin update-${HUB}-image-tag=${IMAGE_TAG}
+          git push origin update-${HUB}-image-tag-${IMAGE_TAG}
 
       - name: Print out a message if no PR is created
         if: ${{ ! env.IMAGE_TAG }}
