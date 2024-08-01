@@ -72,6 +72,7 @@ jobs:
           echo "IMAGE_TAG=${{ needs.build-and-push.outputs.image-tag }}" >> $GITHUB_ENV
 
       - name: See if we should create a branch and push to the datahub repo
+        id: check-image-tag
         run: |
           if [ -z "$IMAGE_TAG" ]; then
             echo "UPDATE_TAG=false" >> $GITHUB_ENV
@@ -82,6 +83,8 @@ jobs:
           fi
 
       - name: Checkout the datahub repo
+        env:
+          UPDATE_TAG: ${{ steps.check-image-tag.outputs.UPDATE_TAG }}
         if: ${{ env.UPDATE_TAG }} == 'true'
         uses: actions/checkout@v4
         with:
@@ -93,12 +96,16 @@ jobs:
             hub/
   
       - name: Set git identity
+        env:
+          UPDATE_TAG: ${{ steps.check-image-tag.outputs.UPDATE_TAG }}
         if: ${{ env.UPDATE_TAG }} == 'true'
         run: |
           git config --global user.email "${{ vars.IMAGE_BUILDER_BOT_EMAIL }}"
           git config --global user.name "${{ vars.IMAGE_BUILDER_BOT_NAME }}"
 
       - name: Update the tag for any deployments that use this image
+        env:
+          UPDATE_TAG: ${{ steps.check-image-tag.outputs.UPDATE_TAG }}
         if: ${{ env.UPDATE_TAG }} == 'true'
         run: |
           for deployment in $(grep -lr ${IMAGE} deployments/ | grep hubploy.yaml); do
@@ -109,6 +116,8 @@ jobs:
           done
 
       - name: Create feature branch, add, commit and push changes
+        env:
+          UPDATE_TAG: ${{ steps.check-image-tag.outputs.UPDATE_TAG }}
         if: ${{ env.UPDATE_TAG }} == 'true'
         run: |
           CHANGED_FILES=$(git status --porcelain -uno)
@@ -123,6 +132,8 @@ jobs:
           git push origin update-${HUB}-image-tag=${IMAGE_TAG}
 
       - name: Print out a message if no PR is created
+        env:
+          UPDATE_TAG: ${{ steps.check-image-tag.outputs.UPDATE_TAG }}
         if: ${{ env.UPDATE_TAG }} == 'false'
         run: |
           echo "Image not updated, no push to datahub repo required"
