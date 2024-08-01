@@ -105,13 +105,11 @@ jobs:
         if: ${{ env.IMAGE_TAG }}
         run: |
           CHANGED_FILES=$(git status --porcelain -uno)
-          echo "git diff:"
           git diff
           git checkout -b update-${HUB}-image-tag-${IMAGE_TAG}
           # to be safe, only add files that have changed
-          for file in ${CHANGED_FILES}; do
-            f=$(echo ${file} | awk '{print $2}')
-            git add ${f}
+          for file in $(echo ${CHANGED_FILES} | awk '{print $2}'); do
+            git add ${file}
           done
           git commit -m "update ${HUB} image tag to ${IMAGE_TAG}: ${CHANGED_FILES}"
           git push origin update-${HUB}-image-tag-${IMAGE_TAG}
