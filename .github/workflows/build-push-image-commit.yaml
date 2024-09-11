@@ -48,6 +48,7 @@ jobs:
         if: steps.changed-files.outputs.any_changed == 'true'
         uses: jupyterhub/repo2docker-action@master
         with:
+          FORCE_REPO2DOCKER_VERSION: repo2docker==2024.07.0
           DOCKER_REGISTRY: us-central1-docker.pkg.dev
           IMAGE_NAME: ${{ env.IMAGE }}
           # Disable pushing a 'latest' tag, as this often just causes confusion
@@ -94,7 +95,7 @@ jobs:
           for deployment in $(grep -lr ${IMAGE} deployments/ | grep hubploy.yaml); do
             old_hash=$(grep ${IMAGE} ${deployment} | awk -F":" '{print $3}')
             new_hash=${IMAGE_TAG}
-            sed -i -e "s/${old_hash}/${new_hash}/g" ${deployment}
+            sed -i -e "s,${IMAGE}:${old_hash},${IMAGE}:${new_hash},g" ${deployment}
             echo "Updated ${deployment} with new image tag ${new_hash}"
           done
 
