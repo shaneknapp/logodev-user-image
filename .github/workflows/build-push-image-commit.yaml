@@ -118,7 +118,7 @@ jobs:
           # now create a PR!
           #
           BODY="${MESSAGE}\n\n${CHANGED_FILES}"
-          gh pr new -t ${MESSAGE} -b ${BODY} -H${BRANCH} -Bstaging
+          gh pr new -t "${MESSAGE}" -b "${BODY}" -H${BRANCH} -Bstaging
       - name: Print out a message if no PR is created
         if: ${{ ! env.IMAGE_TAG }}
         run: |
