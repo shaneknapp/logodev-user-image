@@ -109,9 +109,16 @@ jobs:
           for file in $(echo -e ${CHANGED_FILES}); do
             git add ${file}
           done
-          git commit -m "update ${HUB} image tag to ${IMAGE_TAG}: ${CHANGED_FILES}"
-          git push origin update-${HUB}-image-tag-${IMAGE_TAG}
 
+          BRANCH="update-${HUB}-image-tag-${IMAGE_TAG}"
+          MESSAGE="update ${HUB} image tag to ${IMAGE_TAG}"
+          git commit -m "${MESSAGE}"
+          git push origin ${BRANCH}
+          #
+          # now create a PR!
+          #
+          BODY="${MESSAGE}\n\n${CHANGED_FILES}"
+          gh pr new -t ${MESSAGE} -b ${BODY} -H${BRANCH} -Bstaging
       - name: Print out a message if no PR is created
         if: ${{ ! env.IMAGE_TAG }}
         run: |
