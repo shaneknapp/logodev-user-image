@@ -106,7 +106,7 @@ jobs:
       - name: Create feature branch, add, commit and push changes
         if: ${{ env.IMAGE_TAG }}
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.DATAHUB_CREATE_PR }}
         run: |
           CHANGED_FILES=$(git status --porcelain -uno | awk '{print $2}')
           git diff
